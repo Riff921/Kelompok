@@ -1,0 +1,1283 @@
+<!-- Ciee kepo, mau copy kah manis? -->
+<!-- Minimal izin lah -->
+<!-- Hargain karya orang, jangan cuman bisa c terus v -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta name="author" content="Rifki Al Azhari" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pembagian Kelompok IF-1B</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .login-card {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2);
+        }
+        
+        .group-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .group-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .member-item {
+            transition: all 0.2s ease;
+        }
+        
+        .member-item:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        @media (max-width: 640px) {
+            .group-card:hover {
+                transform: translateY(-4px) scale(1.01);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 min-h-screen relative overflow-x-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-white bg-opacity-40"></div>
+    <div class="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+    <div class="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-0 left-1/2 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style="animation-delay: 4s;"></div>
+    
+    <!-- Login Page -->
+    <div id="loginPage" class="relative z-10 min-h-screen flex items-center justify-center px-4 py-8">
+        <div class="login-card bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-100 fade-in-up">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="flex justify-center mb-6">
+                    <div class="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl float-animation">
+                        <i class="fas fa-university text-3xl text-white"></i>
+                    </div>
+                </div>
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                    Login Komisariat Mahasiswa
+                </h1>
+                <h2 class="text-lg md:text-xl text-gray-600 font-medium">Sistem Pembagian Kelompok IF-1B</h2>
+                <p class="text-sm text-gray-500 mt-2">Akses khusus untuk Komisariat Mahasiswa</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="nim" class="block text-sm font-semibold text-gray-700 mb-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-id-card text-indigo-500"></i>
+                            NIM/NPM
+                        </div>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="nim" 
+                            name="nim"
+                            class="input-field w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-gray-50 focus:bg-white text-base"
+                            placeholder="Masukkan NIM/NPM Anda"
+                            required
+                            autocomplete="username"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-lock text-indigo-500"></i>
+                            Password
+                        </div>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-key text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            class="input-field w-full pl-12 pr-12 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-gray-50 focus:bg-white text-base"
+                            placeholder="Masukkan password Anda"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button 
+                            type="button" 
+                            id="togglePassword"
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-indigo-500 transition-colors"
+                        >
+                            <i id="eyeIcon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
+                    <div class="flex items-center gap-3 text-red-700">
+                        <i class="fas fa-exclamation-triangle text-lg"></i>
+                        <span class="font-medium text-sm">NIM/NPM atau password salah!</span>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit" 
+                    id="loginBtn"
+                    class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-3 text-lg"
+                >
+                    <i class="fas fa-sign-in-alt text-xl"></i>
+                    <span>Masuk ke Sistem</span>
+                </button>
+            </form>
+
+            <!-- Info -->
+            <div class="mt-6 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <i class="fas fa-info-circle text-blue-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-blue-800 mb-2">Akses Komisariat Mahasiswa</h4>
+                        <p class="text-xs text-blue-600 leading-relaxed">Login khusus untuk Komisariat Mahasiswa dalam mengelola sistem pembagian kelompok kelas IF-1B.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application (Hidden Initially) -->
+    <div id="mainApp" class="hidden">
+        <div class="container mx-auto px-4 py-6 lg:py-8">
+            <!-- Header -->
+            <div class="text-center mb-8 lg:mb-12">
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+                    <div class="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl float-animation">
+                        <i class="fas fa-users text-2xl lg:text-3xl text-white"></i>
+                    </div>
+                    <button id="logoutBtn" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <span class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-full text-sm lg:text-base font-semibold shadow-xl">
+                        <i class="fas fa-university mr-2"></i>
+                        Komisariat Mahasiswa
+                    </span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 slide-in-left">
+                    Pembagian Kelompok Random
+                </h1>
+                <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 mb-6 font-medium slide-in-right">Kelas IF-1B - Etika Profesi</h2>
+                <div class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 inline-block border border-gray-100 fade-in-up">
+                    <div class="flex flex-col sm:flex-row gap-4 lg:gap-6 items-center justify-center">
+                        <div class="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-3 rounded-xl shadow-sm">
+                            <div class="bg-blue-500 p-2 rounded-lg">
+                                <i class="fas fa-graduation-cap text-white"></i>
+                            </div>
+                            <span class="font-bold text-blue-700 text-lg">26 Mahasiswa</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-gradient-to-r from-green-50 to-green-100 px-6 py-3 rounded-xl shadow-sm">
+                            <div class="bg-green-500 p-2 rounded-lg">
+                                <i class="fas fa-layer-group text-white"></i>
+                            </div>
+                            <span class="font-bold text-green-700 text-lg">6 Kelompok</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center justify-center mt-6 text-base text-gray-700">
+                        <div class="flex items-center gap-2 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-2 rounded-full">
+                            <i class="fas fa-mars text-blue-600"></i>
+                            <span class="font-semibold">20 Laki-laki</span>
+                        </div>
+                        <span class="hidden sm:inline text-gray-400 text-2xl">•</span>
+                        <div class="flex items-center gap-2 bg-gradient-to-r from-pink-50 to-pink-100 px-4 py-2 rounded-full">
+                            <i class="fas fa-venus text-pink-600"></i>
+                            <span class="font-semibold">6 Perempuan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 mb-8 border border-gray-100">
+                <div class="flex flex-col gap-6 items-center justify-center">
+                    <div class="text-center">
+                        <button id="randomizeBtn" class="group bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-bold py-4 lg:py-5 px-8 lg:px-12 rounded-xl shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl flex items-center gap-4 min-w-[250px] lg:min-w-[300px] justify-center mx-auto text-lg lg:text-xl">
+                            <i class="fas fa-random text-2xl group-hover:rotate-12 transition-transform duration-300"></i>
+                            <span>Acak Kelompok!</span>
+                        </button>
+                        <div id="usageInfo" class="mt-6 text-sm lg:text-base text-gray-600">
+                            <div class="flex items-center justify-center gap-2">
+                                <i class="fas fa-info-circle text-orange-500"></i>
+                                <span>Kesempatan hari ini: <span id="remainingUses" class="font-semibold text-blue-600">3</span> dari 3</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Export Buttons -->
+                    <div id="exportButtons" class="hidden flex flex-col sm:flex-row gap-4 lg:gap-6 items-center justify-center">
+                        <button id="exportPdfBtn" class="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 lg:py-4 px-6 lg:px-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-3 min-w-[160px] justify-center">
+                            <i class="fas fa-file-pdf text-lg"></i>
+                            <span>Export PDF</span>
+                        </button>
+                        <button id="exportExcelBtn" class="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 lg:py-4 px-6 lg:px-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-3 min-w-[160px] justify-center">
+                            <i class="fas fa-file-excel text-lg"></i>
+                            <span>Export Excel</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="loadingIndicator" class="hidden text-center mt-8">
+                    <div class="inline-flex items-center gap-4 text-indigo-600 bg-gradient-to-r from-indigo-50 to-purple-50 px-8 py-4 rounded-2xl shadow-lg border border-indigo-100">
+                        <div class="relative">
+                            <i class="fas fa-sync-alt animate-spin text-2xl text-indigo-600"></i>
+                        </div>
+                        <span class="font-bold text-lg lg:text-xl">Mengacak kelompok...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Groups will be populated here -->
+            </div>
+
+            <!-- Statistics -->
+            <div id="statistics" class="hidden mt-8 lg:mt-12 bg-white rounded-2xl shadow-xl p-6 lg:p-8 border border-gray-100">
+                <h3 class="text-xl lg:text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-3">
+                    <i class="fas fa-chart-bar text-indigo-600"></i>
+                    Statistik Pembagian
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6 text-center">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-12 lg:mt-16 text-center">
+                <div class="bg-gradient-to-r from-gray-900 via-black to-gray-900 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-700 relative overflow-hidden">
+                    <!-- Matrix-style background elements -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute top-2 sm:top-4 left-2 sm:left-4 text-green-400 font-mono text-xs hidden sm:block">01001001 01000110</div>
+                        <div class="absolute top-4 sm:top-8 right-4 sm:right-8 text-green-400 font-mono text-xs hidden sm:block">11010001 10110100</div>
+                        <div class="absolute bottom-2 sm:bottom-4 left-4 sm:left-8 text-green-400 font-mono text-xs hidden sm:block">01001000 01000001</div>
+                        <div class="absolute bottom-4 sm:bottom-8 right-2 sm:right-4 text-green-400 font-mono text-xs hidden sm:block">01000011 01001011</div>
+                    </div>
+                    
+                    <!-- Glitch lines -->
+                    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-green-400 to-transparent opacity-30"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-30"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex justify-center mb-4 sm:mb-6">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-green-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-2xl backdrop-blur-sm float-animation border border-green-400">
+                                <i class="fas fa-terminal text-lg sm:text-2xl lg:text-3xl text-black font-bold"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-3 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 font-mono">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <span class="text-green-400 text-sm sm:text-base">&gt;</span>
+                                <span class="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent text-sm sm:text-base md:text-lg lg:text-xl">KARYA_ANAK_IF1B.exe</span>
+                                <span class="text-green-400 animate-pulse text-sm sm:text-base">_</span>
+                            </div>
+                        </h3>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-xl p-3 sm:p-4 md:p-6 backdrop-blur-sm border border-gray-600 font-mono">
+                            <div class="text-green-400 text-xs sm:text-sm mb-2 sm:mb-3">
+                                <span class="text-gray-500">root@informatika:~$</span> whoami
+                            </div>
+                            <p class="text-white text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-3 sm:mb-4 leading-relaxed">
+                                <span class="text-cyan-400">Mahasiswa_Informatika</span> 
+                                <span class="text-gray-400 hidden sm:inline"> | </span>
+                                <br class="sm:hidden">
+                                <span class="text-green-400">Kelas_IF-1B</span>
+                            </p>
+                            
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-white text-xs sm:text-sm lg:text-base">
+                                <div class="flex items-center gap-2 bg-gray-700 bg-opacity-60 px-3 sm:px-4 py-2 rounded border border-gray-600 w-full sm:w-auto justify-center">
+                                    <i class="fas fa-laptop-code text-green-400"></i>
+                                    <span class="font-semibold">Informatika</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-gray-700 bg-opacity-60 px-3 sm:px-4 py-2 rounded border border-gray-600 w-full sm:w-auto justify-center">
+                                    <i class="fas fa-user-secret text-cyan-400"></i>
+                                    <span class="font-semibold">IF-1B</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-gray-700 bg-opacity-60 px-3 sm:px-4 py-2 rounded border border-gray-600 w-full sm:w-auto justify-center">
+                                    <i class="fas fa-calendar-alt text-yellow-400"></i>
+                                    <span class="font-semibold">2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 sm:mt-6 text-gray-300 text-xs sm:text-sm lg:text-base font-mono">
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 mb-2">
+                                <div class="flex items-center gap-1 sm:gap-2">
+                                    <span class="text-green-400">></span>
+                                    <span class="text-cyan-400">System.out.println</span>
+                                    <span class="text-white">(</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-yellow-400">"Randomizer Algorithm v2.0"</span>
+                                    <span class="text-white">);</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+                                <i class="fas fa-shield-alt text-green-400"></i>
+                                <span class="text-gray-400 text-center">Secure • Efficient • Fair Distribution</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Status indicators -->
+                        <div class="mt-3 sm:mt-4 flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 text-xs">
+                            <div class="flex items-center justify-center gap-1">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-green-400">ONLINE</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                                <span class="text-cyan-400">SECURE</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <div class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                                <span class="text-yellow-400">ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Login credentials
+        const VALID_CREDENTIALS = {
+            nim: "250660121099",
+            password: "250660121099"
+        };
+
+        // Check if user is already logged in
+        function checkLoginStatus() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            if (isLoggedIn) {
+                showMainApp();
+            }
+        }
+
+        // Show main application
+        function showMainApp() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            initializeApp();
+        }
+
+        // Show login page
+        function showLoginPage() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            sessionStorage.removeItem('isLoggedIn');
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nim = document.getElementById('nim').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            const loginCard = document.querySelector('.login-card');
+            
+            if (nim === VALID_CREDENTIALS.nim && password === VALID_CREDENTIALS.password) {
+                // Successful login
+                sessionStorage.setItem('isLoggedIn', 'true');
+                
+                // Show success animation
+                loginCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    showMainApp();
+                    showNotification('Login berhasil! Selamat datang di sistem pembagian kelompok.', 'success');
+                }, 200);
+                
+                errorMessage.classList.add('hidden');
+            } else {
+                // Failed login
+                errorMessage.classList.remove('hidden');
+                loginCard.classList.add('shake-animation');
+                
+                // Remove shake animation after it completes
+                setTimeout(() => {
+                    loginCard.classList.remove('shake-animation');
+                }, 500);
+                
+                // Clear password field
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 01.66 10C2.36 6.91 6.15 4.6 10.5 4.6c1.4 0 2.74.25 3.98.7l-1.52 1.52C12.43 6.61 11.49 6.5 10.5 6.5c-3.28 0-6.14 1.74-7.9 4.5.54 1.21 1.32 2.31 2.28 3.24L3.51 15.61C2.13 14.34 1.11 12.79.66 11 2.36 7.91 6.15 5.6 10.5 5.6c1.61 0 3.15.35 4.52.97l1.42-1.42zM10.5 7.5c1.38 0 2.5 1.12 2.5 2.5 0 .35-.07.68-.2.98l-2.3-2.3c.3-.13.63-.2.98-.2zm0 5c-1.38 0-2.5-1.12-2.5-2.5 0-.35.07-.68.2-.98l2.3 2.3c-.3.13-.63.2-.98.2z"/>
+                    <path d="M2.85 2.15l15 15-1.41 1.41-15-15L2.85 2.15z"/>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"/>
+                `;
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            showNotification('Logout berhasil. Terima kasih telah menggunakan sistem!', 'info');
+            setTimeout(() => {
+                showLoginPage();
+            }, 1000);
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            
+            let bgColor = 'bg-blue-500';
+            let icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/></svg>`;
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-500';
+                icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>`;
+            } else if (type === 'warning') {
+                bgColor = 'bg-orange-500';
+                icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/></svg>`;
+            }
+            
+            notification.innerHTML = `
+                <div class="${bgColor} text-white flex items-center gap-3 px-4 py-3 rounded-lg">
+                    ${icon}
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Initialize the main application (all the existing functionality)
+        function initializeApp() {
+            const students = [
+                { name: "SAEFUL IMAN", gender: "L" },
+                { name: "RIFKI AL AZHARI", gender: "L" },
+                { name: "SALMA NAVITA AZZAHRA", gender: "P" },
+                { name: "AHMAD RIVAI HIDAYATULOH", gender: "L" },
+                { name: "ABIDAL ABU MUZAKAR", gender: "L" },
+                { name: "LAURA SHERLIN AGUSTIN", gender: "P" },
+                { name: "MUHAMAD HAIKAL HIDAYAT", gender: "L" },
+                { name: "SAKA RIZKIA MAHESA", gender: "L" },
+                { name: "AR RAYYAN NADHIF", gender: "L" },
+                { name: "VIKRI ROHMANSYAH", gender: "L" },
+                { name: "M JULIAN SAPUTRA PAMUNGKAS", gender: "L" },
+                { name: "RAISYA ZAHRA MARCHA FATONNAH", gender: "P" },
+                { name: "HAYKAL SAHARA PRATAMA", gender: "L" },
+                { name: "MUHAMAD RHEISYA AL FIQRI HIDAYAT", gender: "L" },
+                { name: "DWI SEPTIAN RIZAL RISWANTO", gender: "L" },
+                { name: "RIZKY IMAM ANDIEKA", gender: "L" },
+                { name: "MUHAMAD ARIFIN", gender: "L" },
+                { name: "RHENA FHADILAH", gender: "P" },
+                { name: "DAVIT NOVAL KURNIAWAN", gender: "L" },
+                { name: "TAUFIK FAJRI HIDAYATULLAH", gender: "L" },
+                { name: "NAZWA SALSABILLA RUSTANDI", gender: "P" },
+                { name: "FAZA QINTHARA", gender: "L" },
+                { name: "MUHAMMAD FAUZAN NUR ISLAM", gender: "L" },
+                { name: "MUHAMMAD FAUZI FATHURROHIM", gender: "L" },
+                { name: "SRI RAHAYU", gender: "P" },
+                { name: "SATRIO PRATAMA", gender: "L" },
+                { name: "AZKA RAMDHANI LESMANA", gender: "L" }
+            ];
+
+            const groupColors = [
+                'from-red-400 to-red-600',
+                'from-blue-400 to-blue-600',
+                'from-green-400 to-green-600',
+                'from-yellow-400 to-yellow-600',
+                'from-purple-400 to-purple-600',
+                'from-pink-400 to-pink-600'
+            ];
+
+            const groupIcons = [
+                '<i class="fas fa-trophy text-xl"></i>',
+                '<i class="fas fa-star text-xl"></i>',
+                '<i class="fas fa-crown text-xl"></i>',
+                '<i class="fas fa-medal text-xl"></i>',
+                '<i class="fas fa-gem text-xl"></i>',
+                '<i class="fas fa-award text-xl"></i>'
+            ];
+
+            let groups = [[], [], [], [], [], []];
+            let isRandomizing = false;
+            
+            // Daily usage limit system with real-time validation
+            const MAX_DAILY_USES = 3;
+            
+            function getTodayKey() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                return `randomizer_${year}_${month}_${day}`;
+            }
+            
+            function getTodayDateString() {
+                const now = new Date();
+                return now.toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
+            
+            function cleanupOldData() {
+                const keys = Object.keys(localStorage);
+                const today = getTodayKey();
+                
+                keys.forEach(key => {
+                    if (key.startsWith('randomizer_') && key !== today) {
+                        const keyParts = key.split('_');
+                        if (keyParts.length === 4) {
+                            try {
+                                const keyDate = new Date(`${keyParts[1]}-${keyParts[2]}-${keyParts[3]}`);
+                                const currentDate = new Date();
+                                const diffTime = Math.abs(currentDate - keyDate);
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                
+                                if (diffDays > 7) {
+                                    localStorage.removeItem(key);
+                                }
+                            } catch (e) {
+                                localStorage.removeItem(key);
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function getDailyUsage() {
+                const todayKey = getTodayKey();
+                const stored = localStorage.getItem(todayKey);
+                
+                if (!stored) return 0;
+                
+                try {
+                    const data = JSON.parse(stored);
+                    if (typeof data === 'object' && data.count !== undefined) {
+                        const storedDate = data.date;
+                        const currentDate = getTodayDateString();
+                        
+                        if (storedDate !== currentDate) {
+                            localStorage.removeItem(todayKey);
+                            return 0;
+                        }
+                        
+                        return Math.min(data.count || 0, MAX_DAILY_USES);
+                    } else {
+                        const usage = parseInt(stored);
+                        return isNaN(usage) || usage < 0 ? 0 : Math.min(usage, MAX_DAILY_USES);
+                    }
+                } catch (e) {
+                    localStorage.removeItem(todayKey);
+                    return 0;
+                }
+            }
+            
+            function incrementDailyUsage() {
+                const todayKey = getTodayKey();
+                const currentUsage = getDailyUsage();
+                const newUsage = Math.min(currentUsage + 1, MAX_DAILY_USES);
+                
+                const usageData = {
+                    count: newUsage,
+                    lastUpdated: new Date().toISOString(),
+                    date: getTodayDateString(),
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    timestamp: Date.now()
+                };
+                
+                localStorage.setItem(todayKey, JSON.stringify(usageData));
+                
+                const summaryData = {
+                    used: newUsage,
+                    remaining: MAX_DAILY_USES - newUsage,
+                    total: MAX_DAILY_USES,
+                    date: getTodayDateString(),
+                    lastAction: new Date().toLocaleTimeString('id-ID', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        second: '2-digit'
+                    })
+                };
+                localStorage.setItem('dailyUsageSummary', JSON.stringify(summaryData));
+                
+                return newUsage;
+            }
+            
+            function getUsageSummary() {
+                const summary = localStorage.getItem('dailyUsageSummary');
+                if (!summary) return null;
+                
+                try {
+                    const data = JSON.parse(summary);
+                    if (data.date !== getTodayDateString()) {
+                        localStorage.removeItem('dailyUsageSummary');
+                        return null;
+                    }
+                    return data;
+                } catch (e) {
+                    localStorage.removeItem('dailyUsageSummary');
+                    return null;
+                }
+            }
+            
+            function getRemainingUses() {
+                cleanupOldData();
+                const usage = getDailyUsage();
+                return Math.max(0, MAX_DAILY_USES - usage);
+            }
+            
+            function validateDailyUsage() {
+                const todayKey = getTodayKey();
+                const stored = localStorage.getItem(todayKey);
+                
+                if (stored) {
+                    try {
+                        const data = JSON.parse(stored);
+                        if (typeof data === 'object' && data.count !== undefined) {
+                            const storedDate = data.date;
+                            const currentDate = getTodayDateString();
+                            
+                            if (storedDate !== currentDate) {
+                                localStorage.removeItem(todayKey);
+                                return 0;
+                            }
+                            
+                            return Math.min(data.count || 0, MAX_DAILY_USES);
+                        } else {
+                            const count = parseInt(stored);
+                            if (!isNaN(count) && count >= 0) {
+                                return Math.min(count, MAX_DAILY_USES);
+                            }
+                        }
+                    } catch (e) {
+                        localStorage.removeItem(todayKey);
+                    }
+                }
+                
+                return 0;
+            }
+            
+            function saveGroupData() {
+                const now = new Date();
+                const timestamp = now.toISOString();
+                const groupData = {
+                    timestamp: timestamp,
+                    date: getTodayDateString(),
+                    time: now.toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }),
+                    deviceTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    groups: groups.map((group, index) => ({
+                        groupNumber: index + 1,
+                        members: group,
+                        maleCount: group.filter(s => s.gender === 'L').length,
+                        femaleCount: group.filter(s => s.gender === 'P').length
+                    }))
+                };
+                
+                localStorage.setItem('currentGroupData', JSON.stringify(groupData));
+                
+                const history = JSON.parse(localStorage.getItem('groupHistory') || '[]');
+                const todayDate = getTodayDateString();
+                const filteredHistory = history.filter(entry => {
+                    try {
+                        return entry.date === todayDate;
+                    } catch (e) {
+                        return false;
+                    }
+                });
+                
+                filteredHistory.unshift(groupData);
+                
+                if (filteredHistory.length > 5) {
+                    filteredHistory.splice(5);
+                }
+                
+                localStorage.setItem('groupHistory', JSON.stringify(filteredHistory));
+                
+                return groupData;
+            }
+            
+            function getCurrentGroupData() {
+                const stored = localStorage.getItem('currentGroupData');
+                if (!stored) return null;
+                
+                try {
+                    const data = JSON.parse(stored);
+                    if (data.date && data.date !== getTodayDateString()) {
+                        localStorage.removeItem('currentGroupData');
+                        return null;
+                    }
+                    return data;
+                } catch (e) {
+                    localStorage.removeItem('currentGroupData');
+                    return null;
+                }
+            }
+            
+            function exportToPDF() {
+                const groupData = getCurrentGroupData();
+                if (!groupData) {
+                    alert('Tidak ada data kelompok untuk diekspor. Silakan acak kelompok terlebih dahulu.');
+                    return;
+                }
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFont('helvetica');
+                
+                doc.setFontSize(18);
+                doc.setTextColor(0, 0, 0);
+                doc.text('PEMBAGIAN KELOMPOK KELAS IF-1B', 105, 20, { align: 'center' });
+                
+                doc.setFontSize(14);
+                doc.text('Mata Kuliah: Etika Profesi', 105, 30, { align: 'center' });
+                
+                doc.setFontSize(10);
+                doc.text(`Tanggal: ${groupData.date} | Waktu: ${groupData.time}`, 105, 40, { align: 'center' });
+                
+                doc.setLineWidth(0.5);
+                doc.line(20, 45, 190, 45);
+                
+                let yPosition = 55;
+                
+                groupData.groups.forEach((group, index) => {
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`KELOMPOK ${group.groupNumber}`, 20, yPosition);
+                    doc.text(`(${group.maleCount} L, ${group.femaleCount} P)`, 150, yPosition);
+                    
+                    yPosition += 8;
+                    
+                    doc.setFontSize(10);
+                    group.members.forEach((member, memberIndex) => {
+                        const memberText = `${memberIndex + 1}. ${member.name} (${member.gender})`;
+                        doc.text(memberText, 25, yPosition);
+                        yPosition += 6;
+                    });
+                    
+                    yPosition += 5;
+                    
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                });
+                
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.setTextColor(128, 128, 128);
+                    doc.text(`Halaman ${i} dari ${pageCount}`, 105, 290, { align: 'center' });
+                    doc.text('Generated by Pembagian Kelompok IF-1B', 105, 295, { align: 'center' });
+                }
+                
+                const fileName = `Kelompok_IF1B_${groupData.date.replace(/\//g, '-')}.pdf`;
+                doc.save(fileName);
+            }
+            
+            function exportToExcel() {
+                const groupData = getCurrentGroupData();
+                if (!groupData) {
+                    alert('Tidak ada data kelompok untuk diekspor. Silakan acak kelompok terlebih dahulu.');
+                    return;
+                }
+                
+                const wb = XLSX.utils.book_new();
+                
+                const wsData = [];
+                
+                wsData.push(['PEMBAGIAN KELOMPOK KELAS IF-1B']);
+                wsData.push(['Mata Kuliah: Etika Profesi']);
+                wsData.push([`Tanggal: ${groupData.date} | Waktu: ${groupData.time}`]);
+                wsData.push([]);
+                
+                groupData.groups.forEach((group, index) => {
+                    wsData.push([`KELOMPOK ${group.groupNumber}`, '', `Total: ${group.members.length} (${group.maleCount} L, ${group.femaleCount} P)`]);
+                    wsData.push(['No', 'Nama', 'Gender']);
+                    
+                    group.members.forEach((member, memberIndex) => {
+                        wsData.push([memberIndex + 1, member.name, member.gender]);
+                    });
+                    
+                    wsData.push([]);
+                });
+                
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                
+                ws['!cols'] = [
+                    { wch: 5 },
+                    { wch: 35 },
+                    { wch: 8 }
+                ];
+                
+                XLSX.utils.book_append_sheet(wb, ws, 'Pembagian Kelompok');
+                
+                const summaryData = [];
+                summaryData.push(['RINGKASAN PEMBAGIAN KELOMPOK']);
+                summaryData.push([]);
+                summaryData.push(['Kelompok', 'Jumlah Anggota', 'Laki-laki', 'Perempuan']);
+                
+                groupData.groups.forEach((group) => {
+                    summaryData.push([
+                        `Kelompok ${group.groupNumber}`,
+                        group.members.length,
+                        group.maleCount,
+                        group.femaleCount
+                    ]);
+                });
+                
+                summaryData.push([]);
+                summaryData.push(['TOTAL', groupData.groups.reduce((sum, g) => sum + g.members.length, 0), 
+                                 groupData.groups.reduce((sum, g) => sum + g.maleCount, 0),
+                                 groupData.groups.reduce((sum, g) => sum + g.femaleCount, 0)]);
+                
+                const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+                wsSummary['!cols'] = [{ wch: 15 }, { wch: 15 }, { wch:12 }, { wch: 12 }];
+                
+                XLSX.utils.book_append_sheet(wb, wsSummary, 'Ringkasan');
+                
+                const fileName = `Kelompok_IF1B_${groupData.date.replace(/\//g, '-')}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+            }
+            
+            function updateUsageDisplay() {
+                const remainingUses = getRemainingUses();
+                const usedCount = MAX_DAILY_USES - remainingUses;
+                const currentDate = getTodayDateString();
+                const currentTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                const summary = getUsageSummary();
+                
+                const remainingElement = document.getElementById('remainingUses');
+                const randomizeBtn = document.getElementById('randomizeBtn');
+                const usageInfo = document.getElementById('usageInfo');
+                
+                if (remainingElement) {
+                    remainingElement.textContent = remainingUses;
+                }
+                
+                if (remainingUses === 0) {
+                    randomizeBtn.disabled = true;
+                    randomizeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    randomizeBtn.innerHTML = `
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                        </svg>
+                        <span class="text-lg">Batas Harian Tercapai</span>
+                    `;
+                    
+                    const lastActionText = summary && summary.lastAction ? ` | Terakhir: ${summary.lastAction}` : '';
+                    usageInfo.innerHTML = `
+                        <div class="flex flex-col items-center justify-center gap-2 text-red-600">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-ban text-red-500"></i>
+                                <span class="font-medium">Sudah menggunakan 3/3 kesempatan hari ini</span>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Reset otomatis besok pukul 00:00${lastActionText}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Sekarang: ${currentDate} ${currentTime}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    randomizeBtn.disabled = false;
+                    randomizeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    randomizeBtn.innerHTML = `
+                        <svg class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                        </svg>
+                        <span class="text-lg">Acak Kelompok!</span>
+                    `;
+                    
+                    let statusClass = 'text-blue-600';
+                    let statusText = '';
+                    let usageStatusText = '';
+                    
+                    if (remainingUses === 1) {
+                        statusClass = 'text-orange-600';
+                        statusText = ' <span class="text-orange-600 font-medium">(Terakhir!)</span>';
+                        usageStatusText = 'Sudah menggunakan 2/3 kesempatan';
+                    } else if (remainingUses === 2) {
+                        statusClass = 'text-yellow-600';
+                        usageStatusText = 'Sudah menggunakan 1/3 kesempatan';
+                    } else {
+                        usageStatusText = 'Belum menggunakan kesempatan hari ini';
+                    }
+                    
+                    const lastActionText = summary && summary.lastAction ? ` | Terakhir: ${summary.lastAction}` : '';
+                    
+                    usageInfo.innerHTML = `
+                        <div class="flex flex-col items-center justify-center gap-1">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-info-circle text-orange-500"></i>
+                                <span>Kesempatan hari ini: <span id="remainingUses" class="font-semibold ${statusClass}">${remainingUses}</span> dari 3${statusText}</span>
+                            </div>
+                            <div class="text-xs text-gray-600 font-medium">
+                                ${usageStatusText}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                ${currentDate} ${currentTime}${lastActionText}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            function shuffleArray(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+
+            function distributeStudents() {
+                groups = [[], [], [], [], [], []];
+                const shuffledStudents = shuffleArray(students);
+                
+                shuffledStudents.forEach((student, index) => {
+                    const groupIndex = index % 6;
+                    groups[groupIndex].push(student);
+                });
+            }
+
+            function renderGroups() {
+                const resultsContainer = document.getElementById('results');
+                resultsContainer.innerHTML = '';
+
+                groups.forEach((group, index) => {
+                    const groupCard = document.createElement('div');
+                    groupCard.className = `group-card bg-white rounded-xl shadow-lg overflow-hidden fade-in-up`;
+                    groupCard.style.animationDelay = `${index * 0.1}s`;
+                    
+                    const maleCount = group.filter(s => s.gender === 'L').length;
+                    const femaleCount = group.filter(s => s.gender === 'P').length;
+                    
+                    groupCard.innerHTML = `
+                        <div class="bg-gradient-to-br ${groupColors[index]} p-6 lg:p-8 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -mr-12 -mt-12"></div>
+                            <div class="absolute bottom-0 left-0 w-16 h-16 bg-white bg-opacity-5 rounded-full -ml-8 -mb-8"></div>
+                            <div class="relative z-10">
+                                <h3 class="text-xl lg:text-2xl font-bold text-white flex items-center gap-4 mb-4">
+                                    <div class="bg-white bg-opacity-25 p-3 rounded-xl shadow-lg">
+                                        ${groupIcons[index]}
+                                    </div>
+                                    <span>Kelompok ${index + 1}</span>
+                                </h3>
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-white">
+                                    <div class="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                                        <i class="fas fa-users"></i>
+                                        <span class="font-semibold">${group.length} anggota</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="bg-blue-500 bg-opacity-40 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                                            <i class="fas fa-mars text-xs"></i>
+                                            ${maleCount}
+                                        </span>
+                                        <span class="bg-pink-500 bg-opacity-40 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                                            <i class="fas fa-venus text-xs"></i>
+                                            ${femaleCount}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 lg:p-8">
+                            <ul class="space-y-3">
+                                ${group.map((student, studentIndex) => `
+                                    <li class="member-item flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-md">
+                                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${student.gender === 'L' ? 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700' : 'bg-gradient-to-r from-pink-100 to-pink-200 text-pink-700'} shadow-sm">
+                                            <i class="fas ${student.gender === 'L' ? 'fa-mars' : 'fa-venus'}"></i>
+                                        </div>
+                                        <span class="font-semibold text-gray-800 flex-1 text-sm lg:text-base">${student.name}</span>
+                                        <span class="text-xs px-3 py-1 rounded-full font-medium ${student.gender === 'L' ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-pink-50 text-pink-700 border border-pink-200'}">${student.gender === 'L' ? 'L' : 'P'}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(groupCard);
+                });
+            }
+
+            function renderStatistics() {
+                const statsContainer = document.getElementById('statistics');
+                const statsGrid = statsContainer.querySelector('.grid');
+                
+                statsGrid.innerHTML = '';
+                
+                groups.forEach((group, index) => {
+                    const maleCount = group.filter(s => s.gender === 'L').length;
+                    const femaleCount = group.filter(s => s.gender === 'P').length;
+                    
+                    const statCard = document.createElement('div');
+                    statCard.className = 'bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-200';
+                    statCard.innerHTML = `
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-r ${groupColors[index]} rounded-xl flex items-center justify-center text-white shadow-lg">
+                                ${groupIcons[index]}
+                            </div>
+                        </div>
+                        <div class="text-sm lg:text-base font-bold text-gray-700 text-center mb-3">Kelompok ${index + 1}</div>
+                        <div class="flex justify-center gap-2">
+                            <span class="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm">
+                                <i class="fas fa-mars text-xs"></i>
+                                ${maleCount}
+                            </span>
+                            <span class="bg-gradient-to-r from-pink-100 to-pink-200 text-pink-800 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm">
+                                <i class="fas fa-venus text-xs"></i>
+                                ${femaleCount}
+                            </span>
+                        </div>
+                    `;
+                    
+                    statsGrid.appendChild(statCard);
+                });
+                
+                statsContainer.classList.remove('hidden');
+            }
+
+            function randomizeGroups() {
+                if (isRandomizing) return;
+                
+                const remainingUses = getRemainingUses();
+                if (remainingUses === 0) {
+                    return;
+                }
+                
+                isRandomizing = true;
+                const randomizeBtn = document.getElementById('randomizeBtn');
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                
+                randomizeBtn.disabled = true;
+                randomizeBtn.classList.add('opacity-50');
+                loadingIndicator.classList.remove('hidden');
+                
+                const existingCards = document.querySelectorAll('.group-card');
+                existingCards.forEach(card => {
+                    card.classList.add('shuffle-animation');
+                });
+                
+                setTimeout(() => {
+                    distributeStudents();
+                    renderGroups();
+                    renderStatistics();
+                    
+                    saveGroupData();
+                    
+                    document.getElementById('exportButtons').classList.remove('hidden');
+                    
+                    const newUsage = incrementDailyUsage();
+                    const remainingAfter = MAX_DAILY_USES - newUsage;
+                    
+                    if (remainingAfter === 0) {
+                        showNotification('Batas harian tercapai! Tidak bisa mengacak lagi hari ini.', 'warning');
+                    } else if (remainingAfter === 1) {
+                        showNotification('Kesempatan terakhir! Sisa 1 kali pengacakan hari ini.', 'warning');
+                    } else {
+                        showNotification(`Berhasil mengacak kelompok! Sisa ${remainingAfter} kesempatan hari ini.`, 'success');
+                    }
+                    
+                    updateUsageDisplay();
+                    
+                    if (getRemainingUses() > 0) {
+                        randomizeBtn.disabled = false;
+                        randomizeBtn.classList.remove('opacity-50');
+                    }
+                    loadingIndicator.classList.add('hidden');
+                    isRandomizing = false;
+                }, 1500);
+            }
+
+            document.getElementById('randomizeBtn').addEventListener('click', randomizeGroups);
+            document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
+            document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
+
+            function performRealTimeValidation() {
+                cleanupOldData();
+                
+                const validatedUsage = validateDailyUsage();
+                const todayKey = getTodayKey();
+                
+                if (validatedUsage !== getDailyUsage()) {
+                    if (validatedUsage === 0) {
+                        localStorage.removeItem(todayKey);
+                    } else {
+                        const usageData = {
+                            count: validatedUsage,
+                            lastUpdated: new Date().toISOString(),
+                            date: getTodayDateString()
+                        };
+                        localStorage.setItem(todayKey, JSON.stringify(usageData));
+                    }
+                }
+                
+                updateUsageDisplay();
+            }
+            
+            setInterval(performRealTimeValidation, 30000);
+            
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    performRealTimeValidation();
+                }
+            });
+            
+            window.addEventListener('focus', performRealTimeValidation);
+            
+            performRealTimeValidation();
+            renderGroups();
+            
+            const existingData = getCurrentGroupData();
+            if (existingData && existingData.groups && existingData.groups.some(g => g.members && g.members.length > 0)) {
+                document.getElementById('exportButtons').classList.remove('hidden');
+                groups = existingData.groups.map(g => g.members || []);
+                renderGroups();
+                renderStatistics();
+            }
+        }
+
+        // Check login status on page load
+        checkLoginStatus();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98864c5ba3347e32',t:'MTc1OTQzMDExMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
